@@ -8,5 +8,6 @@ namespace ReadingIsGood.Domain
         IMongoCollection<Customer> Customers { get; }
         IMongoCollection<Product> Products { get; }
         IMongoCollection<Order> Orders { get; }
+        IMongoCollection<EventLog> EventLogs { get; }
     }
 }

@@ -8,9 +8,8 @@ namespace ReadingIsGood.Domain.Documents
     public class Document
     {
         [BsonId]
-        [BsonRepresentation(BsonType.String)]
-        ObjectId Id { get; set; }
-
-        DateTime CreatedAt { get; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

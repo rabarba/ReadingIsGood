@@ -1,4 +1,5 @@
-﻿using ReadingIsGood.Domain.Documents;
+﻿using MongoDB.Bson;
+using ReadingIsGood.Domain.Documents;
 using System.Threading.Tasks;
 
 namespace ReadingIsGood.Domain.Interfaces
@@ -10,13 +11,13 @@ namespace ReadingIsGood.Domain.Interfaces
         /// </summary>
         /// <param name="customer"></param>
         /// <returns></returns>
-        Task<string> CreateCustomer(Customer customer);
+        Task<string> CreateCustomerAsync(Customer customer);
 
         /// <summary>
         /// Get a customer
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<Customer> GetCustomer(string id);
+        Task<Customer> GetCustomerAsync(string id);
     }
 }
