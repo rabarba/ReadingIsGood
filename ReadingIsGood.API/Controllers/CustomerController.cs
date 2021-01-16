@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReadingIsGood.API.Application.Customers.Commands;
 using ReadingIsGood.API.Application.Customers.Queries;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 namespace ReadingIsGood.API.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/customers")]
     public class CustomerController : ControllerBase
     {

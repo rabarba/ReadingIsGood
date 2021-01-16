@@ -1,10 +1,12 @@
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ReadingIsGood.API.Application.Customers.Commands;
 using ReadingIsGood.API.Extensions;
@@ -12,7 +14,10 @@ using ReadingIsGood.Domain.Interfaces;
 using ReadingIsGood.Domain.Settings;
 using ReadingIsGood.Infrastructure.Repositories;
 using ReadingIsGood.Infrastructure.Settings;
+using System;
 using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ReadingIsGood.API
 {
@@ -38,11 +43,59 @@ namespace ReadingIsGood.API
             services.AddScoped<ICustomerOrderRepository, CustomerOrderRepository>();
             services.AddScoped<IEventLogRepository, EventLogRepository>();
 
-            services.AddControllers();
+            #region Jwt
 
+            var key = Encoding.ASCII.GetBytes("ReadingIsGoodSecretKey");
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context => Task.CompletedTask
+                };
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.FromMinutes(5)
+                };
+            });
+
+            #endregion
+
+            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Reading Is Good Api", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                 {
+                   new OpenApiSecurityScheme
+                   {
+                     Reference = new OpenApiReference
+                     {
+                       Type = ReferenceType.SecurityScheme,
+                       Id = "Bearer"
+                     }
+                    },
+                    new string[] { }
+                  }
+                });
             });
         }
 
@@ -63,6 +116,9 @@ namespace ReadingIsGood.API
             //DbInit.SeedProduct(app);
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.ConfigureExceptionHandler();
 
