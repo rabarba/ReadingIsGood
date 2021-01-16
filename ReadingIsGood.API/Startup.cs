@@ -113,7 +113,7 @@ namespace ReadingIsGood.API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Reading Is Good V1");
             });
 
-            //DbInit.SeedProduct(app);
+            DbInit.SeedProduct(app);
 
             app.UseRouting();
 

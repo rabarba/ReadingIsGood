@@ -12,7 +12,7 @@ services:
       - 8081:8081
     depends_on:
       - mongo
- server:
+ web:
     build: .
     restart: always
     ports:
