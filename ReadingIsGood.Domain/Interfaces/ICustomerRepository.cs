@@ -11,7 +11,7 @@ namespace ReadingIsGood.Domain.Interfaces
         /// </summary>
         /// <param name="customer"></param>
         /// <returns></returns>
-        Task<string> CreateCustomerAsync(Customer   customer);
+        Task<string> CreateCustomerAsync(Customer customer);
 
         /// <summary>
         /// Get a customer
