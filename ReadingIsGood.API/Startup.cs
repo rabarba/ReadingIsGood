@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using ReadingIsGood.API.Application.Customers.Commands;
+using ReadingIsGood.API.Extensions;
 using ReadingIsGood.Domain.Interfaces;
 using ReadingIsGood.Domain.Settings;
 using ReadingIsGood.Infrastructure.Repositories;
@@ -34,6 +35,7 @@ namespace ReadingIsGood.API
             services.AddMediatR(typeof(RegisterCustomerCommand).GetTypeInfo().Assembly);
 
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ICustomerOrderRepository, CustomerOrderRepository>();
             services.AddScoped<IEventLogRepository, EventLogRepository>();
 
             services.AddControllers();
@@ -58,7 +60,11 @@ namespace ReadingIsGood.API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Reading Is Good V1");
             });
 
+            //DbInit.SeedProduct(app);
+
             app.UseRouting();
+
+            app.ConfigureExceptionHandler();
 
             app.UseEndpoints(endpoints =>
             {

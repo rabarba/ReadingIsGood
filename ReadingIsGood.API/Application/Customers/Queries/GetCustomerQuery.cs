@@ -5,7 +5,7 @@ namespace ReadingIsGood.API.Application.Customers.Queries
 {
     public class GetCustomerQuery : IRequest<CustomerDto>
     {
-        [FromRoute]
+        [FromRoute(Name = "customerId")]
         public string CustomerId { get; set; }
     }
 }

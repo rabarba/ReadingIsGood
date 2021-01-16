@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ReadingIsGood.API.Application.Customers.Commands;
 using ReadingIsGood.API.Application.Customers.Queries;
+using ReadingIsGood.API.Models;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -19,19 +20,19 @@ namespace ReadingIsGood.API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(HttpServiceResponseBase<string>), (int)HttpStatusCode.Created)]
         public async Task<IActionResult> Post([FromBody] RegisterCustomerCommand command)
         {
             var result = await _mediator.Send(command);
-            return Created(string.Empty, result);
+            return Created(string.Empty, new HttpServiceResponseBase<string> { Data = result, Code = HttpStatusCode.Created });
         }
 
-        [HttpGet("{CustomerId}")]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+        [HttpGet("{customerId}")]
+        [ProducesResponseType(typeof(HttpServiceResponseBase<CustomerDto>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Get([FromQuery] GetCustomerQuery query)
         {
             var result = await _mediator.Send(query);
-            return Ok(result);
+            return Ok(new HttpServiceResponseBase<CustomerDto> { Data = result, Code = HttpStatusCode.OK });
         }
     }
 }

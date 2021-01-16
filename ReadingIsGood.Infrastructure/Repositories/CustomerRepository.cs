@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using ReadingIsGood.Domain;
 using ReadingIsGood.Domain.Documents;
 using ReadingIsGood.Domain.Interfaces;
