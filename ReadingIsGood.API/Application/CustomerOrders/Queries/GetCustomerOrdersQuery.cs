@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace ReadingIsGood.API.Application.Customers.Queries
+namespace ReadingIsGood.API.Application.CustomerOrders.Queries
 {
-    public class GetCustomerQuery : IRequest<CustomerDto>
+    public class GetCustomerOrdersQuery : IRequest<OrderDto>
     {
         [Required]
         [FromRoute(Name = "customerId")]

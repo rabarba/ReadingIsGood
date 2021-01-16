@@ -6,21 +6,21 @@ using ReadingIsGood.Domain.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ReadingIsGood.API.Application.Customers.Events
+namespace ReadingIsGood.API.Application.CustomerOrders.Events
 {
-    public class CustomerCreatedHandler : INotificationHandler<CustomerCreatedEvent>
+    public class CustomerOrderPlacedHandler : INotificationHandler<CustomerOrderPlacedEvent>
     {
         private readonly IEventLogRepository _eventLogRepository;
-        public CustomerCreatedHandler(IEventLogRepository eventLogRepository)
+        public CustomerOrderPlacedHandler(IEventLogRepository eventLogRepository)
         {
             _eventLogRepository = eventLogRepository;
         }
-        public async Task Handle(CustomerCreatedEvent notification, CancellationToken cancellationToken)
+        public async Task Handle(CustomerOrderPlacedEvent notification, CancellationToken cancellationToken)
         {
             var eventLog = new EventLog
             {
-                Message = $"{notification.CustomerId} customer was created.",
-                Data = JsonConvert.SerializeObject(notification.CustomerId)
+                Message = $"{notification.CustomerOrderId} customer order was created.",
+                Data = JsonConvert.SerializeObject(notification)
             };
 
             await _eventLogRepository.CreateEventLogAsync(eventLog);

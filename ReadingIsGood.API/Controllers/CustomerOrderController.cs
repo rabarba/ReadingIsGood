@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ReadingIsGood.API.Application.CustomerOrders.Commands;
+using ReadingIsGood.API.Application.CustomerOrders.Queries;
 using ReadingIsGood.API.Models;
 using System.Net;
 using System.Threading.Tasks;
@@ -27,6 +28,24 @@ namespace ReadingIsGood.API.Controllers
             var result = await _mediator.Send(command);
 
             return Created(string.Empty, new HttpServiceResponseBase<string> { Data = result, Code = HttpStatusCode.Created });
+        }
+
+        [HttpGet]
+        [Route("{customerId}/orders")]
+        [ProducesResponseType(typeof(HttpServiceResponseBase<OrderDto>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Get([FromQuery] GetCustomerOrdersQuery query)
+        {
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("{customerId}/orders/{orderId}")]
+        [ProducesResponseType(typeof(HttpServiceResponseBase<OrderDetailDto>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Get([FromQuery] GetCustomerOrderDetailQuery query)
+        {
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
     }
 }
