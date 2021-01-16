@@ -8,6 +8,8 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
 COPY ["ReadingIsGood.API/ReadingIsGood.API.csproj", "ReadingIsGood.API/"]
+COPY ["ReadingIsGood.Infrastructure/ReadingIsGood.Infrastructure.csproj", "ReadingIsGood.Infrastructure/"]
+COPY ["ReadingIsGood.Domain/ReadingIsGood.Domain.csproj", "ReadingIsGood.Domain/"]
 RUN dotnet restore "ReadingIsGood.API/ReadingIsGood.API.csproj"
 COPY . .
 WORKDIR "/src/ReadingIsGood.API"
