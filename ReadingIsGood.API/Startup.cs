@@ -12,6 +12,7 @@ using ReadingIsGood.API.Application.Customers.Commands;
 using ReadingIsGood.API.Extensions;
 using ReadingIsGood.Domain.Interfaces;
 using ReadingIsGood.Domain.Settings;
+using ReadingIsGood.Infrastructure.Helpers;
 using ReadingIsGood.Infrastructure.Repositories;
 using ReadingIsGood.Infrastructure.Settings;
 using System;
