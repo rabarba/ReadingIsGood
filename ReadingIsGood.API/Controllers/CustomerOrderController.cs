@@ -38,7 +38,7 @@ namespace ReadingIsGood.API.Controllers
         public async Task<IActionResult> Get([FromQuery] GetCustomerOrdersQuery query)
         {
             var result = await _mediator.Send(query);
-            return Ok(result);
+            return Ok(new HttpServiceResponseBase<OrderDto> { Data = result, Code = HttpStatusCode.OK });
         }
 
         [HttpGet]
@@ -47,7 +47,7 @@ namespace ReadingIsGood.API.Controllers
         public async Task<IActionResult> Get([FromQuery] GetCustomerOrderDetailQuery query)
         {
             var result = await _mediator.Send(query);
-            return Ok(result);
+            return Ok(new HttpServiceResponseBase<OrderDetailDto> { Data = result, Code = HttpStatusCode.OK });
         }
     }
 }

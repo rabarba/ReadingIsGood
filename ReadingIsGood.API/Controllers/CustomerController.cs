@@ -12,6 +12,8 @@ namespace ReadingIsGood.API.Controllers
     [ApiController]
     [Authorize]
     [Route("api/customers")]
+    [ProducesResponseType(typeof(HttpServiceResponseBase), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(HttpServiceResponseBase), (int)HttpStatusCode.InternalServerError)]
     public class CustomerController : ControllerBase
     {
         private readonly IMediator _mediator;

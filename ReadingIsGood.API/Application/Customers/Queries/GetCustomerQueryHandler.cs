@@ -2,6 +2,8 @@
 using MongoDB.Bson;
 using ReadingIsGood.Domain.Exceptions;
 using ReadingIsGood.Domain.Interfaces;
+using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,9 +18,16 @@ namespace ReadingIsGood.API.Application.Customers.Queries
         }
         public async Task<CustomerDto> Handle(GetCustomerQuery request, CancellationToken cancellationToken)
         {
+            var validationResult = new GetCustomerQueryValidator().Validate(request);
+            if (!validationResult.IsValid)
+            {
+                var message = string.Join(',', validationResult.Errors.Select(x => x.ErrorMessage).ToList());
+                throw new ApiException(message, HttpStatusCode.BadRequest);
+            }
+
             if (!ObjectId.TryParse(request.CustomerId, out ObjectId customerObjectId))
             {
-                throw new ApiException("Missing format", System.Net.HttpStatusCode.BadRequest);
+                throw new ApiException("Missing format", HttpStatusCode.BadRequest);
             }
 
             var customer = await _customerRepository.GetCustomerAsync(customerObjectId.ToString());

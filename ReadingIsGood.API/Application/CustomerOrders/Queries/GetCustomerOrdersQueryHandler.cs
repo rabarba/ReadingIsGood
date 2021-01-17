@@ -1,6 +1,8 @@
 ﻿using MediatR;
+using ReadingIsGood.Domain.Exceptions;
 using ReadingIsGood.Domain.Interfaces;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,6 +18,13 @@ namespace ReadingIsGood.API.Application.CustomerOrders.Queries
         }
         public async Task<OrderDto> Handle(GetCustomerOrdersQuery request, CancellationToken cancellationToken)
         {
+            var validationResult = new GetCustomerOrdersQueryValidator().Validate(request);
+            if (!validationResult.IsValid)
+            {
+                var message = string.Join(',', validationResult.Errors.Select(x => x.ErrorMessage).ToList());
+                throw new ApiException(message, HttpStatusCode.BadRequest);
+            }
+
             var customerOrders = await _customerOrderRepository.GetCustomerOrdersAsync(request.CustomerId);
             return new OrderDto
             {

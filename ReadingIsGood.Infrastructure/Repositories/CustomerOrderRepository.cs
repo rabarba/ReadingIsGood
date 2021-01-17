@@ -35,6 +35,11 @@ namespace ReadingIsGood.Infrastructure.Repositories
             var productFilter = Builders<Product>.Filter.In(x => x.Id, customerOrder.Products.Select(x => x.Id));
             var productsInStock = await _context.Products.Find(productFilter).ToListAsync();
 
+            if (productsInStock == null || productsInStock.Count < 1)
+            {
+                throw new ApiException("The product not found our stock sorry :(", System.Net.HttpStatusCode.BadRequest);
+            }
+
             if (!CheckProductStock(customerOrder.Products, productsInStock))
             {
                 throw new ApiException("The product not found our stock sorry :(", System.Net.HttpStatusCode.BadRequest);

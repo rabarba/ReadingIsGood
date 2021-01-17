@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using ReadingIsGood.Domain.Documents;
 using ReadingIsGood.Infrastructure.Settings;
 using System.Collections.Generic;
@@ -15,7 +16,11 @@ namespace ReadingIsGood.Infrastructure.Helpers
             var settings = serviceScope.ServiceProvider.GetService<IOptions<MongoDbSettings>>().Value;
             var context = new ReadingIsGoodContext(settings);
 
-            context.MongoClient.GetDatabase("ReadingIsGoodDb").DropCollection("Products");
+            var count = context.MongoClient.GetDatabase("ReadingIsGoodDb").GetCollection<Product>("Products").CountDocuments(new BsonDocument());
+            if (count > 0)
+            {
+                return;
+            }
 
             var products = new List<Product>
             {

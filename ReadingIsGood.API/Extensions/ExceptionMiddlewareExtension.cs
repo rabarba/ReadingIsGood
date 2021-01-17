@@ -41,7 +41,7 @@ namespace ReadingIsGood.API.Extensions
                                 Message = "Oops!",
                                 Exception = exception.Message
                             };
-                            break; ;
+                            break;
                     }
 
                     await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
