@@ -19,7 +19,6 @@ namespace ReadingIsGood.API.Extensions
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     var exception = contextFeature.Error;
 
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     context.Response.ContentType = "application/json";
 
                     var response = new HttpServiceResponseBase();
@@ -27,6 +26,8 @@ namespace ReadingIsGood.API.Extensions
                     switch (exception)
                     {
                         case ApiException apiException:
+
+                            context.Response.StatusCode = (int)apiException.ErrorCode;
                             response.Error = new ErrorModel
                             {
                                 Code = apiException.ErrorCode,
@@ -35,6 +36,9 @@ namespace ReadingIsGood.API.Extensions
                             };
                             break;
                         default:
+
+                            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
                             response.Error = new ErrorModel
                             {
                                 Code = HttpStatusCode.InternalServerError,
